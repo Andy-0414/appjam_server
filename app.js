@@ -18,7 +18,9 @@ app.use(express.static("data"));
 app.listen(80, () => {
     console.log("SERVER OPEN");
 })
-
+app.get('/',(req,res)=>{
+    console.log("Hello APPJAM");
+})
 app.post('/user/signin', (req, res) => { // 로그인
     var id = req.body.id; // 유저 아이디
     var pw = req.body.pw; // 유저 패스워드
