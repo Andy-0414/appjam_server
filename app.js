@@ -233,11 +233,13 @@ app.post('/date/delete', (req, res) => { // 일정 삭제
 app.post('/date/list', (req, res) => { // 일정 목록
     var id = req.body.id;
     var date = [req.body.year, req.body.month, req.body.date];
+    console.log(id,date)
     fs.readdir(`data/date/`, (err, files) => {
         if (err) {
             res.status(505).end(); // 에러 시 505
         }
         else {
+            console.log(files[files.findIndex(file => file.split('.')[0])])
             fs.readFile("data/date/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
                 var post = JSON.parse(data);
                 if (post.findIndex(x => dateArray(x.date, date)) == -1) {
