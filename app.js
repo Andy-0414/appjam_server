@@ -47,7 +47,6 @@ app.post('/user/signin', (req, res) => { // 로그인
     })
 })
 app.post('/user/signup', (req, res) => { // 회원가입
-    var name = req.body.name; // 유저 이름
     var id = req.body.id; // 유저 아이디
     var pw = req.body.pw; // 유저 패스워드
     if (!name || !id || !pw) {
@@ -61,13 +60,13 @@ app.post('/user/signup', (req, res) => { // 회원가입
                 res.status(505).end(); // 에러 시 505
             }
             if (!result[0]) {
-                var sql = "INSERT INTO login (id, password, name) VALUES(?,?,?)";
+                var sql = "INSERT INTO login (id, password) VALUES(?,?)";
                 con.query(sql, [id, pw, name], (err, result, fields) => {
                     if (err) {
                         res.status(505).end(); // 에러 시 505
                     }
                     else {
-                        console.log(`[Create User]\nID : ${id}\nNAME : ${name}`);
+                        console.log(`[Create User]\nID : ${id}`);
                         res.status(200).end() // 제대로 생성됬을 시 200
                     }
                 })
@@ -387,5 +386,5 @@ app.post('/post/today', (req, res) => { //
                 });
             })
         }
-    })
-})
+    })          
+})  
