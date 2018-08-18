@@ -251,9 +251,8 @@ app.post('/date/list', (req, res) => { // 일정 목록
 app.post('/post/create', (req, res) => { // 글쓰기
     var id = req.body.id;
     var day = new Date();
-    var question = (req.body.question ? req.body.question : "");
     var mdata = {
-        question: question,
+        title: req.body.title,
         content: req.body.content,
         date: day,
         img: []
@@ -292,6 +291,7 @@ app.post('/post/update', (req, res) => { // 글쓰기
     var id = req.body.id;
     var num = req.body.num
     var content = req.body.content;
+    var title = req.body.title;
     fs.readdir(`data/posts/`, (err, files) => {
         if (err) {
             res.status(505).end(); // 에러 시 505
@@ -300,6 +300,7 @@ app.post('/post/update', (req, res) => { // 글쓰기
             fs.readFile("data/posts/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
                 var post = JSON.parse(data);
                 post[num].content = content;
+                post[num].title = title;
                 fs.writeFile(`data/posts/${id}.json`, JSON.stringify(post), (err) => {
                     if (err) {
                         res.status(505).end(); // 에러 시 505
