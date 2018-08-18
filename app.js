@@ -364,8 +364,10 @@ app.post('/post/list', (req, res) => { // 글 목록
         }
     })
 })
-app.post('/post/today', (req, res) => { // 글쓰기
+app.post('/post/today', (req, res) => { // 
     var id = req.body.id;
+    var day = new Date();
+    var date = `${day.getFullYear()}.${day.getMonth() + 1}.${day.getDate() + 1}`;
     fs.readdir(`data/posts/`, (err, files) => {
         if (err) {
             res.status(505).end(); // 에러 시 505
@@ -373,8 +375,15 @@ app.post('/post/today', (req, res) => { // 글쓰기
         else {
             fs.readFile("data/posts/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
                 var post = JSON.parse(data);
+                var mdata = []
+
+                for (var x in post) {
+                    if (post[x].date == date) {
+                        mdata.push(post[x])
+                    }
+                }
                 res.send({
-                    result: post
+                    result: mdata
                 });
             })
         }
