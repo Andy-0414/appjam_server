@@ -240,21 +240,21 @@ app.post('/date/list', (req, res) => { // 일정 목록
                 var post = JSON.parse(data);
                 res.send({
                     result: post
-                });
+                });z
             })
         }
     })
 })
 
 // 글 쓰기
-
+var day = new Date()
 app.post('/post/create', (req, res) => { // 글쓰기
     var id = req.body.id;
     var day = new Date();
     var mdata = {
         title: req.body.title,
         content: req.body.content,
-        date: day,
+        date: `${day.getFullYear()}.${day.getMonth() + 1}.${day.getDate()}`,
         img: []
     }
     fs.readdir(`data/posts/`, (err, files) => {
