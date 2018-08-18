@@ -4,7 +4,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 var mysql = require('mysql');
 var con = mysql.createConnection({
-    host: 'localhost', // 202.182.123.138
+    host: '202.182.123.138', // 202.182.123.138
     user: 'root',
     password: '1111',
     database: 'appjam'
