@@ -49,7 +49,7 @@ app.post('/user/signin', (req, res) => { // 로그인
 app.post('/user/signup', (req, res) => { // 회원가입
     var id = req.body.id; // 유저 아이디
     var pw = req.body.pw; // 유저 패스워드
-    if (!name || !id || !pw) {
+    if ( !id || !pw) {
         console.log("[NOT DATA]")
         res.status(405).end() // 데이터가 없을 시 405
     }
@@ -61,7 +61,7 @@ app.post('/user/signup', (req, res) => { // 회원가입
             }
             if (!result[0]) {
                 var sql = "INSERT INTO login (id, password) VALUES(?,?)";
-                con.query(sql, [id, pw, name], (err, result, fields) => {
+                con.query(sql, [id, pw], (err, result, fields) => {
                     if (err) {
                         res.status(505).end(); // 에러 시 505
                     }
