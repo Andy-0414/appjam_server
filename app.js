@@ -4,7 +4,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 var mysql = require('mysql');
 var con = mysql.createConnection({
-    host: '202.182.123.138',
+    host: 'localhost', // 202.182.123.138
     user: 'root',
     password: '1111',
     database: 'appjam'
@@ -229,5 +229,5 @@ app.post('/post/list', (req, res) => { // 글쓰기
                 });
             })
         }
-    })
+    })+
 })
