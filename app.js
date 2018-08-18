@@ -254,7 +254,7 @@ app.post('/post/create', (req, res) => { // 글쓰기
     var mdata = {
         title: req.body.title,
         content: req.body.content,
-        date: `${day.getFullYear()}.${day.getMonth() + 1}.${day.getDate()}`,
+        date: `${day.getFullYear()}.${day.getMonth() + 1}.${day.getDate() + 1}`,
         img: []
     }
     fs.readdir(`data/posts/`, (err, files) => {
