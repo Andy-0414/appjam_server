@@ -132,6 +132,7 @@ function dateArray(arr1, arr2) {
 app.post('/date/create', (req, res) => { // 일정 생성
     var id = req.body.id;
     var mdata = {
+        title: req.body.title,
         content: req.body.content,
         date: [req.body.year, req.body.month, req.body.date]
     }
