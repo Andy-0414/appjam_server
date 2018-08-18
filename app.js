@@ -246,6 +246,7 @@ app.post('/date/list', (req, res) => { // 일정 목록
                     })
                 }
                 else {
+                    console.log("[DATE Send]")
                     res.send(post[post.findIndex(x => dateArray(x.date, date))]);
                 }
             })
