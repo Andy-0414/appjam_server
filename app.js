@@ -18,7 +18,7 @@ app.use(express.static("data"));
 app.listen(80, () => {
     console.log("SERVER OPEN");
 })
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.send("Hello APPJAM");
 })
 app.post('/user/signin', (req, res) => { // 로그인
@@ -123,6 +123,128 @@ app.post('/user/change', (req, res) => { // 유저찾기에 성공시 비밀번�
     })
 })
 
+// 일정
+
+function dateArray(arr1, arr2) {
+    return (arr1[0] == arr2[0] && arr1[1] == arr2[1] && arr1[2] == arr2[2])
+}
+
+app.post('/date/create', (req, res) => { // 일정 생성
+    var id = req.body.id;
+    var mdata = {
+        content: req.body.content,
+        date: req.body.date
+    }
+    fs.readdir(`data/date/`, (err, files) => {
+        if (files.findIndex(file => file.split('.')[0] == id) == -1) {
+            console.log("[NEW USER CREATE]");
+            var p_data = [mdata]
+            post.push(p_)
+            fs.writeFile(`data/date/${id}.json`, JSON.stringify(p_data), (err) => {
+                if (err) {
+                    res.status(505).end();
+                }
+                else {
+                    res.status(200).end();
+                }
+            })
+        }
+        else {
+            fs.readFile("data/date/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
+                var post = JSON.parse(data);
+                post.push(mdata)
+                fs.writeFile(`data/date/${id}.json`, JSON.stringify(post), (err) => {
+                    if (err) {
+                        res.status(505).end(); // 에러 시 505
+                    }
+                    else {
+                        console.log("[DATE Up]")
+                        res.status(200).end(); // 성공 시 200
+                    }
+                })
+            })
+        }
+    })
+})
+
+app.post('/date/update', (req, res) => { // 일정 수정
+    var id = req.body.id;
+    var date = req.body.date
+    var content = req.body.content;
+    fs.readdir(`data/date/`, (err, files) => {
+        if (err) {
+
+            res.status(505).end(); // 에러 시 505
+        }
+        else {
+            fs.readFile("data/date/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
+                var post = JSON.parse(data);
+                if (post.findIndex(x => dateArray(x.date, date)) == -1) {
+                    res.status(404).end();
+                }
+                else {
+                    post[post.findIndex(x => dateArray(x.date, date))].content = content;
+                }
+                fs.writeFile(`data/date/${id}.json`, JSON.stringify(post), (err) => {
+                    if (err) {
+                        res.status(505).end(); // 에러 시 505
+                    }
+                    else {
+                        console.log("[DATE Update]")
+                        res.status(200).end(); // 성공 시 200
+                    }
+                })
+            })
+        }
+    })
+})
+
+app.post('/date/delete', (req, res) => { // 일정 삭제
+    var id = req.body.id;
+    var date = req.body.date
+    fs.readdir(`data/date/`, (err, files) => {
+        if (err) {
+            res.status(505).end(); // 에러 시 505
+        }
+        else {
+            fs.readFile("data/date/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
+                var post = JSON.parse(data);
+                if (post.findIndex(x => dateArray(x.date, date)) == -1) {
+                    res.status(404).end();
+                }
+                else {
+                    post.splice(post.findIndex(x => x.date == dateArray(x.date, date)), 1);
+                }
+                fs.writeFile(`data/date/${id}.json`, JSON.stringify(post), (err) => {
+                    if (err) {
+                        res.status(505).end(); // 에러 시 505
+                    }
+                    else {
+                        console.log("[DATE Delete]")
+                        res.status(200).end(); // 성공 시 200
+                    }
+                })
+            })
+        }
+    })
+})
+
+app.post('/date/list', (req, res) => { // 일정 목록
+    var id = req.body.id;
+    fs.readdir(`data/date/`, (err, files) => {
+        if (err) {
+            res.status(505).end(); // 에러 시 505
+        }
+        else {
+            fs.readFile("data/date/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
+                var post = JSON.parse(data);
+                res.send({
+                    result: post
+                });
+            })
+        }
+    })
+})
 
 // 글 쓰기
 
@@ -202,7 +324,7 @@ app.post('/post/delete', (req, res) => { // 글쓰기
         else {
             fs.readFile("data/posts/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
                 var post = JSON.parse(data);
-                post.splice(num,1);
+                post.splice(num, 1);
                 fs.writeFile(`data/posts/${id}.json`, JSON.stringify(post), (err) => {
                     if (err) {
                         res.status(505).end(); // 에러 시 505
