@@ -133,7 +133,7 @@ app.post('/date/create', (req, res) => { // 일정 생성
     var id = req.body.id;
     var mdata = {
         content: req.body.content,
-        date: req.body.date
+        date: [req.body.year, req.body.month, req.body.date]
     }
     fs.readdir(`data/date/`, (err, files) => {
         if (files.findIndex(file => file.split('.')[0] == id) == -1) {
@@ -231,6 +231,7 @@ app.post('/date/delete', (req, res) => { // 일정 삭제
 
 app.post('/date/list', (req, res) => { // 일정 목록
     var id = req.body.id;
+    var date = [req.body.year, req.body.month, req.body.date];
     fs.readdir(`data/date/`, (err, files) => {
         if (err) {
             res.status(505).end(); // 에러 시 505
@@ -238,16 +239,23 @@ app.post('/date/list', (req, res) => { // 일정 목록
         else {
             fs.readFile("data/date/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
                 var post = JSON.parse(data);
-                res.send({
-                    result: post
-                });z
+                if (post.findIndex(x => dateArray(x.date, date)) == -1) {
+                    res.send({
+                        result: {}
+                    })
+                }
+                else {
+                    res.send({
+                        result: post[post.findIndex(x => dateArray(x.date, date))]
+                    });
+                }
             })
         }
     })
 })
 
 // 글 쓰기
-var day = new Date()
+
 app.post('/post/create', (req, res) => { // 글쓰기
     var id = req.body.id;
     var day = new Date();
@@ -340,7 +348,23 @@ app.post('/post/delete', (req, res) => { // 글쓰기
     })
 })
 
-app.post('/post/list', (req, res) => { // 글쓰기
+app.post('/post/list', (req, res) => { // 글 목록
+    var id = req.body.id;
+    fs.readdir(`data/posts/`, (err, files) => {
+        if (err) {
+            res.status(505).end(); // 에러 시 505
+        }
+        else {
+            fs.readFile("data/posts/" + files[files.findIndex(file => file.split('.')[0] == id)], (err, data) => {
+                var post = JSON.parse(data);
+                res.send({
+                    result: post
+                });
+            })
+        }
+    })
+})
+app.post('/post/today', (req, res) => { // 글쓰기
     var id = req.body.id;
     fs.readdir(`data/posts/`, (err, files) => {
         if (err) {
