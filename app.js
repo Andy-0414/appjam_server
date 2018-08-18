@@ -245,9 +245,7 @@ app.post('/date/list', (req, res) => { // 일정 목록
                     })
                 }
                 else {
-                    res.send({
-                        result: post[post.findIndex(x => dateArray(x.date, date))]
-                    });
+                    res.send(post[post.findIndex(x => dateArray(x.date, date))]);
                 }
             })
         }
